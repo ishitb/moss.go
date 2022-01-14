@@ -4,19 +4,22 @@ type Moss struct {
 	Languages []string
 	server    string
 	port      int
-	uniqueId  string
+	unique_id string
 
 	// Flags
-	language   string
-	directory  string
-	base_files []string
-	max_limit  int
+	language             string
+	directory            string
+	base_files           []string
+	max_limit            int
+	comment              string
+	no_of_matching_files int
+	experimental         bool
 
 	// Args
 	files []string
 }
 
-func NewMoss(uniqueId string) Moss {
+func NewMoss(unique_id string) Moss {
 	moss := Moss{
 		Languages: []string{
 			"c",
@@ -45,24 +48,37 @@ func NewMoss(uniqueId string) Moss {
 			"javascript",
 			"plsql",
 		},
-		server:     "moss.stanford.edu",
-		port:       7690,
-		uniqueId:   uniqueId,
-		language:   "c",
-		base_files: []string{},
-		max_limit:  10,
-		files:      []string{},
+		server:               "moss.stanford.edu",
+		port:                 7690,
+		unique_id:            unique_id,
+		language:             "c",
+		base_files:           []string{},
+		max_limit:            10,
+		files:                []string{},
+		no_of_matching_files: 250,
+		experimental:         false,
 	}
 
 	return moss
 }
 
-func (moss *Moss) ChangeLanguage(language string) {
+func (moss *Moss) SetLanguage(language string) {
+	if language == "cpp" {
+		language = "cc"
+	}
 	(*moss).language = language
 }
 
-func (moss *Moss) ChangeMaxLimit(max_limit int) {
+func (moss *Moss) SetMaxLimit(max_limit int) {
 	(*moss).max_limit = max_limit
+}
+
+func (moss *Moss) SetNoOfMatchingFiles(no_of_matching_files int) {
+	(*moss).no_of_matching_files = no_of_matching_files
+}
+
+func (moss *Moss) SetExperimental(experimental bool) {
+	(*moss).experimental = experimental
 }
 
 func (moss *Moss) SetDirectory(directory string) {
