@@ -1,5 +1,7 @@
 package moss
 
+import "github.com/ishitb/moss-client-go/utils"
+
 type Moss struct {
 	Languages []string
 	server    string
@@ -81,22 +83,58 @@ func (moss *Moss) SetExperimental(experimental bool) {
 	(*moss).experimental = experimental
 }
 
+func (moss *Moss) SetComment(comment string) {
+	(*moss).comment = comment
+}
+
 func (moss *Moss) SetDirectory(directory string) {
 	(*moss).directory = directory
 }
 
 func (moss *Moss) SetBaseFiles(base_files ...string) {
-	(*moss).base_files = base_files
+	for _, base_file := range base_files {
+		size, err := utils.GetSize(base_file)
+
+		if size > 0 {
+			(*moss).base_files = append((*moss).base_files, base_file)
+
+		} else {
+			utils.ErrorP(err.Error())
+		}
+	}
 }
 
 func (moss *Moss) AddBaseFile(base_file string) {
-	(*moss).base_files = append((*moss).base_files, base_file)
+	size, err := utils.GetSize(base_file)
+
+	if size > 0 {
+		(*moss).base_files = append((*moss).base_files, base_file)
+
+	} else {
+		utils.ErrorP(err.Error())
+	}
 }
 
 func (moss *Moss) SetFiles(files ...string) {
-	(*moss).files = files
+	for _, file := range files {
+		size, err := utils.GetSize(file)
+
+		if size > 0 {
+			(*moss).files = append((*moss).files, file)
+
+		} else {
+			utils.ErrorP(err.Error())
+		}
+	}
 }
 
 func (moss *Moss) AddFile(file string) {
-	(*moss).files = append((*moss).files, file)
+	size, err := utils.GetSize(file)
+
+	if size > 0 {
+		(*moss).files = append((*moss).files, file)
+
+	} else {
+		utils.ErrorP(err.Error())
+	}
 }
