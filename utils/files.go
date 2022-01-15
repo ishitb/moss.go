@@ -3,6 +3,7 @@ package utils
 import (
 	"errors"
 	"os"
+	"path/filepath"
 )
 
 func SaveFile(path string, data []byte) {
@@ -33,4 +34,22 @@ func GetSize(name string) (int, error) {
 		return 0, nil
 	}
 	return 0, err
+}
+
+func GetFilesByWildcard(wildcard string) []string {
+	matches, err := filepath.Glob(wildcard)
+
+	for _, file := range matches {
+		size, existError := GetSize(file)
+
+		if size <= 0 || existError != nil {
+			ErrorP(existError.Error())
+		}
+	}
+
+	if err != nil {
+		ErrorP(err.Error())
+	}
+
+	return matches
 }

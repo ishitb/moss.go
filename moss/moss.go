@@ -115,6 +115,10 @@ func (moss *Moss) AddBaseFile(base_file string) {
 	}
 }
 
+func (moss *Moss) AddBaseFilesByWildcard(wildcard string) {
+	(*moss).base_files = append((*moss).base_files, utils.GetFilesByWildcard(wildcard)...)
+}
+
 func (moss *Moss) SetFiles(files ...string) {
 	for _, file := range files {
 		size, err := utils.GetSize(file)
@@ -137,4 +141,8 @@ func (moss *Moss) AddFile(file string) {
 	} else {
 		utils.ErrorP(err.Error())
 	}
+}
+
+func (moss *Moss) AddFilesByWildcard(wildcard string) {
+	(*moss).files = append((*moss).files, utils.GetFilesByWildcard(wildcard)...)
 }
