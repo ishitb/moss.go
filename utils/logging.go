@@ -3,6 +3,7 @@ package utils
 // Helped by github.com/BRO3886
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/fatih/color"
@@ -39,5 +40,6 @@ func PrintF(data string, formats ...color.Attribute) {
 // ErrorP prints errors with a format and interface like in printf and exits the program.
 func ErrorP(format string, a ...interface{}) {
 	ErrorStyle.Printf(format, a...)
+	fmt.Println()
 	os.Exit(1)
 }
