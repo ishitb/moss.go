@@ -6,7 +6,7 @@ import (
 	"net"
 	"strings"
 
-	"github.com/ishitb/moss-client-go/utils"
+	"github.com/ishitb/moss.go/utils"
 )
 
 type Moss struct {
