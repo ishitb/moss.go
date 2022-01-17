@@ -1,0 +1,35 @@
+The -b option names a "base file". When a base file is supplied,
+program code that also appears in the base file is not counted in matches.
+A typical base file will include, for example, the instructor-supplied 
+IMPORTANT: Unlike previous versions of moss, the -b option *always*
+takes a single filename, even if the -d option is also used.
+Examples: Submit all of the C++ files in the current directory, using skeleton.cc
+as the base file:
+    moss -l cc -b skeleton.cc *.cc
+Submit all of the ML programs in directories asn1.96/* and asn1.97/*, where
+asn1.97/instructor/example.ml and asn1.96/instructor/example.ml contain the base files.
+    moss -l ml -b asn1.97/instructor/example.ml -b asn1.96/instructor/example.ml -d asn1.97/*/*.ml asn1.96/*/*.ml 
+
+
+The -m option sets the maximum number of times a given passage may appear
+before it is ignored.  A passage of code that appears in many programs
+is probably legitimate sharing and not the result of plagiarism.  With -m N,
+any passage appearing in more than N programs is treated as if it appeared in 
+a base file (i.e., it is never reported). The default for -m is 10.
+Examples:
+    moss -l pascal -m 2 *.pascal 
+    moss -l cc -m 1000000 -b mycode.cc asn1/*.cc
+
+The -c option supplies a comment string that is attached to the generated
+report.
+Example:
+    moss -l scheme -c "Scheme programs" *.sch
+
+The -n option determines the number of matching files to show in the results.
+The default is 250.
+Example:
+    moss -c java -n 200 *.java
+
+The -x option sends queries to the current experimental version of the server.
+Example:
+    moss -x -l ml *.ml

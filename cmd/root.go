@@ -27,19 +27,18 @@ var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "moss.go",
-	Short: "A CLI Tool for Stanford MOSS plagiarism tool",
+	Use:     "moss.go",
+	Short:   "A CLI Tool for Stanford MOSS plagiarism tool",
+	Version: "0.2",
 	Long: `
-	A CLI Tool for plagiarism checkingg using the Stanford MOSS script (https://theory.stanford.edu/~aiken/moss/)
+	A CLI Tool for plagiarism checkingg using the Stanford MOSS script (https://theory.stanford.edu/~aiken/moss/).
+	This is a GoLang interface for Moss client which was written for AutoGrader for handling similarity in code assignment submissions.
 
 	* Run moss-go-client help for checking the available commands and configurations
 	* Run moss-go-client login to add your MOSS unique ID to the system
 
 	Made with ❤️ by https://ishit.beswal.com
 	`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -57,8 +56,6 @@ func init() {
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
-
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.moss-go.yaml)")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
