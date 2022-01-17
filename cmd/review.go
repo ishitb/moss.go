@@ -1,12 +1,14 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
+	"bufio"
+	"encoding/json"
 	"fmt"
+	"os"
 
+	"github.com/ishitb/moss.go/moss"
+	"github.com/ishitb/moss.go/utils"
+	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 )
 
@@ -71,18 +73,63 @@ var reviewCmd = &cobra.Command{
 			moss -x -l ml *.ml
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
-		files := args
-		fmt.Println(files)
-
-		basefiles, _ := cmd.Flags().GetStringArray("basefile")
-		comment, _ := cmd.Flags().GetString("comment")
-		directory, _ := cmd.Flags().GetBool("directory")
-		experimental, _ := cmd.Flags().GetBool("experimental")
-		language, _ := cmd.Flags().GetString("language")
-		maxSimilarities, _ := cmd.Flags().GetInt64("maxSimilarities")
-		fmt.Println(basefiles, comment, directory, experimental, language, maxSimilarities)
+		review(cmd, args)
 	},
-	Args: cobra.MinimumNArgs(1),
+	Args: cobra.MinimumNArgs(2),
+}
+
+func review(cmd *cobra.Command, args []string) {
+	// files := args
+
+	basefiles, _ := cmd.Flags().GetStringArray("basefile")
+	comment, _ := cmd.Flags().GetString("comment")
+	directory, _ := cmd.Flags().GetBool("directory")
+	experimental, _ := cmd.Flags().GetBool("experimental")
+	language, _ := cmd.Flags().GetString("language")
+	maxSimilarities, _ := cmd.Flags().GetInt64("maxSimilarities")
+	fmt.Println(basefiles, comment, directory, experimental, language, maxSimilarities)
+
+	if language == "" {
+		language = chooseLanguage()
+		fmt.Println("Language:", language)
+	}
+
+	credsJson := utils.ReadFile("creds.json")
+	var creds map[string]interface{}
+	err := json.Unmarshal([]byte(credsJson), &creds)
+
+	if err != nil {
+		utils.ErrorP(err.Error())
+	}
+
+	uniqueIdRaw := creds["uniqueId"]
+	uniqueId := ""
+	if uniqueIdRaw == nil {
+		reader := bufio.NewReader(os.Stdin)
+		uniqueId = utils.GetInput("Enter your one time unique MOSS ID", reader)
+		utils.Warn("Please use the login command to save your unique ID\n")
+	} else {
+		uniqueId = fmt.Sprintf("%0.0f", uniqueIdRaw.(float64))
+	}
+
+	utils.Warn(uniqueId)
+}
+
+func chooseLanguage() string {
+	languages := moss.Languages
+
+	utils.Info("Choose a language:")
+	prompt := promptui.Select{
+		Label: "Select Source Language",
+		Items: languages,
+	}
+	result, _, err := prompt.Run()
+
+	if err != nil {
+		utils.ErrorP("Prompt failed %v\n", err)
+	}
+
+	return languages[result]
 }
 
 func init() {
@@ -91,8 +138,8 @@ func init() {
 	reviewCmd.Flags().StringP(
 		"language",
 		"l",
-		"c",
-		"Specify the source language of the tested programs",
+		"",
+		"Specify the source language of the tested programs | If not specified then a menu will be displayed asking the same",
 	)
 	reviewCmd.Flags().BoolP(
 		"directory",

@@ -21,14 +21,14 @@ var (
 )
 
 var (
-	// Warn is a sprintf function with WarnStyle
-	Warn = WarnStyle.Sprintf
-	// Error is a sprintf function with ErrorStyle
-	Error = ErrorStyle.Sprintf
-	// Info is a sprintf function with InfoStyle
-	Info = InfoStyle.Sprintf
-	// Print is a sprintf function with PrintStyle
-	Print = PrintStyle.Sprintf
+	// Warn is a printf function with WarnStyle
+	Warn = WarnStyle.Printf
+	// Error is a printf function with ErrorStyle
+	Error = ErrorStyle.Printf
+	// Info is a printf function with InfoStyle
+	Info = InfoStyle.Printf
+	// Print is a printf function with PrintStyle
+	Print = PrintStyle.Printf
 )
 
 // PrintF prints the given string with custom color formats
