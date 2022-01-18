@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ishitb/moss.go/utils"
+	"github.com/ishitb/mossgo/utils"
 	"github.com/spf13/cobra"
 )
 

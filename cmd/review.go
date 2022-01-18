@@ -7,8 +7,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/ishitb/moss.go/moss"
-	"github.com/ishitb/moss.go/utils"
+	"github.com/ishitb/mossgo/moss"
+	"github.com/ishitb/mossgo/utils"
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 )

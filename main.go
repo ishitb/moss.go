@@ -15,7 +15,7 @@ limitations under the License.
 */
 package main
 
-import "github.com/ishitb/moss.go/cmd"
+import "github.com/ishitb/mossgo/cmd"
 
 func main() {
 

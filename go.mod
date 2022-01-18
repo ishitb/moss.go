@@ -1,4 +1,4 @@
-module github.com/ishitb/moss.go
+module github.com/ishitb/mossgo
 
 go 1.17
 
