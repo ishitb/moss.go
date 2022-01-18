@@ -1,7 +1,7 @@
 <h1 align="center">💻 MOSS Plagiarism Checker CLI</h1>
 `mossgo`: A CLI Tool for Stanford MOSS plagiarism tool made in GoLang
 
-<img src="screenshots/moss.go.screenshot.png" alt="screenshot" width="500">
+<img src="screenshots/moss.go.screenshot.png" alt="screenshot">
 
 ---
 # Contents
