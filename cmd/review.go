@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/ishitb/moss.go/moss"
 	"github.com/ishitb/moss.go/utils"
@@ -75,11 +76,11 @@ var reviewCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		review(cmd, args)
 	},
-	Args: cobra.MinimumNArgs(2),
+	Args: cobra.MinimumNArgs(1),
 }
 
 func review(cmd *cobra.Command, args []string) {
-	// files := args
+	files := args
 
 	basefiles, _ := cmd.Flags().GetStringArray("basefile")
 	comment, _ := cmd.Flags().GetString("comment")
@@ -87,13 +88,15 @@ func review(cmd *cobra.Command, args []string) {
 	experimental, _ := cmd.Flags().GetBool("experimental")
 	language, _ := cmd.Flags().GetString("language")
 	maxSimilarities, _ := cmd.Flags().GetInt64("maxSimilarities")
-	fmt.Println(basefiles, comment, directory, experimental, language, maxSimilarities)
+	noOfMatchingFiles, _ := cmd.Flags().GetInt64("show")
 
+	// Choosing language if flag not provided
 	if language == "" {
 		language = chooseLanguage()
 		fmt.Println("Language:", language)
 	}
 
+	// Reading creds.json for unique ID
 	credsJson := utils.ReadFile("creds.json")
 	var creds map[string]interface{}
 	err := json.Unmarshal([]byte(credsJson), &creds)
@@ -102,6 +105,7 @@ func review(cmd *cobra.Command, args []string) {
 		utils.ErrorP(err.Error())
 	}
 
+	// Getting Unique ID
 	uniqueIdRaw := creds["uniqueId"]
 	uniqueId := ""
 	if uniqueIdRaw == nil {
@@ -112,7 +116,40 @@ func review(cmd *cobra.Command, args []string) {
 		uniqueId = fmt.Sprintf("%0.0f", uniqueIdRaw.(float64))
 	}
 
-	utils.Warn(uniqueId)
+	mossObj := moss.NewMoss(uniqueId)
+
+	// Adding Base Files
+	for _, basefile := range basefiles {
+		if strings.Contains(basefile, "*") {
+			mossObj.AddBaseFilesByWildcard(basefile)
+		} else {
+			mossObj.AddBaseFile(basefile)
+		}
+	}
+
+	// Adding Files
+	for _, file := range files {
+		if strings.Contains(file, "*") {
+			mossObj.AddFilesByWildcard(file)
+		} else {
+			mossObj.AddFile(file)
+		}
+	}
+
+	// Setting flags on moss object
+	mossObj.SetComment(comment)
+	if directory {
+		mossObj.SetDirectory()
+	}
+	if experimental {
+		mossObj.SetExperimental()
+	}
+	mossObj.SetLanguage(language)
+	mossObj.SetMaxLimit(int(maxSimilarities))
+	mossObj.SetNoOfMatchingFiles(int(noOfMatchingFiles))
+
+	result := mossObj.SendForReview()
+	utils.Warn(result + "\n")
 }
 
 func chooseLanguage() string {
@@ -158,6 +195,12 @@ func init() {
 		"m",
 		10,
 		"Specifies the maximum number of times a given passage may appear before it is ignored",
+	)
+	reviewCmd.Flags().Int64P(
+		"show",
+		"n",
+		250,
+		"Specifies the maximum number of file comaprisons to be made",
 	)
 	reviewCmd.Flags().StringP(
 		"comment",
