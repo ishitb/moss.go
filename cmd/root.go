@@ -34,10 +34,8 @@ var rootCmd = &cobra.Command{
 	A CLI Tool for plagiarism checkingg using the Stanford MOSS script (https://theory.stanford.edu/~aiken/moss/).
 	This is a GoLang interface for Moss client which was written for AutoGrader for handling similarity in code assignment submissions.
 
-	* Run moss-go-client help for checking the available commands and configurations
-	* Run moss-go-client login to add your MOSS unique ID to the system
-
-	Made with ❤️ by https://ishit.beswal.com
+	* Run mossgo help for checking the available commands and configurations
+	* Run mossgo login to add your MOSS unique ID to the system
 	`,
 }
 

@@ -39,7 +39,7 @@ var reviewCmd = &cobra.Command{
 
 		The -b option names a "base file". When a base file is supplied,
 		program code that also appears in the base file is not counted in matches.
-		A typical base file will include, for example, the instructor-supplied 
+		A typical base file will include, for example, the instructor-supplied source code
 		IMPORTANT: Unlike previous versions of moss, the -b option *always*
 		takes a single filename, even if the -d option is also used.
 		Examples: Submit all of the C++ files in the current directory, using skeleton.cc
